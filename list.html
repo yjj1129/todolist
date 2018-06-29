@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">  
+    <title>日程管理</title>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/bootstrap/3.3.6/bootstrap.css" rel="stylesheet">
+	<script src="js/jquery.min.js"></script>
+	 <script src="js/bootstrap/3.3.6/bootstrap.min.js"></script>
+	 <style type="text/css">
+	
+     body {	font-size: 13px; }
+     body, .templatemo-left-nav { background: #1f2124; }
+     h1, h2, h3 { margin: 0; }
+     h2 { font-size: 1.6em; }
+     h3 {
+	  color: #7f7f7f;
+	  font-size: 1.4em;
+     }
+    ul {
+	list-style-type: none;
+    margin: 0;
+    padding: 0;
+    }
+	button{font-size：10px;background-color: #555555;}
+    table thead tr th{text-align:center;}
+			.class2{
+				  background: #444;
+				  color: #eeeeee;
+				}
+	</style>
+	<script>
+	  $(document).ready(function(){
+
+	/* Mobile menu */
+	$('.mobile-menu-icon').click(function(){
+		$('.templatemo-left-nav').slideToggle();				
+	});
+
+	/* Close the widget when clicked on close button */
+	$('.templatemo-content-widget .fa-times').click(function(){
+		$(this).parent().slideUp(function(){
+			$(this).hide();
+		});
+	});
+    });
+	
+	
+</script>
+  </head>
+  <body id="id1">  
+    <!-- Left -->
+    <div class="templatemo-flex-row">
+      <div class="templatemo-sidebar">
+        <header class="templatemo-site-header">
+          <h1>日程管理</h1>
+        </header>
+        <!-- Search box -->
+        <form class="templatemo-search-form" role="search">
+          <div class="input-group">
+              
+              <input type="text" id="myInput" onkeyup="myFunction()" placeholder="搜索...">
+              			  
+          </div>
+        </form>
+		<div class="mobile-menu-icon">
+            <i class="glyphicon glyphicon-align-justify" style="font-size: 40px"></i>
+        </div>
+        <nav class="templatemo-left-nav">          
+          <ul>
+            <li><a href="list.html" class="active"><i class="glyphicon glyphicon-th-list"></i>项目列表</a></li>
+            <li><a href="index.html"><i class="glyphicon glyphicon-off"></i>注销登录</a></li>
+          </ul>  
+        </nav>
+        </div>
+      <!-- Main content --> 
+      <div class="templatemo-content">
+            <div id="app">
+			<div class="panel panel-primary">
+				<div class="panel-heading">项目管理</div>
+				<ul class="pagination pagination-lg">
+					<template v-for="(athing,page) in thing">
+					<li  class="active"  @click="numPage(page,$event)"><a href="#">{{ athing.name }}</a></li>
+					<li v-else   @click="numPage(page,$event)"><a href="#">{{ athing.name }}</a></li>
+					</template>
+					<br>
+					<br>
+					<br>
+					<input type="text" id="thingk"  placeholder="事件名">
+					<input type="button" @click="addthing" value="添加事件" class="btn btn-primary"/>
+				
+					
+
+		</ul> 
+		<br>
+       
+            <table class='table table-bordered table-striped text-center'>
+                <thead>
+                    <tr>
+                        <th>完成情况</th>
+                        <th>项目名称</th>
+                        <th>优先级</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="myTable">
+					<template v-for="(project, index) in projects">
+						<tr v-if="index>=(curpage-1)*pagesize && index<curpage*pagesize " >
+							<td> 
+								<input type="checkbox"  v-model="projects[index].class1" >
+							</td>
+							<td v-bind:class="{class2: projects[index].class1}">{{ project.ps }}</td>
+							<td>{{ project.priority }}</td>
+							<td><a href='#'@click="changeProject(project)" >修改</a>
+								<a href='#'@click="deleteProject(index)" >删除</a>
+							</td>
+						</tr>
+					</template>
+				</tbody>
+
+				<tfoot>
+					<tr  class="success">
+					<td></td>
+						<td><input type ="text" v-model="newProject.ps" class="form-control"/></td>
+						<td>
+							<select v-model="newProject.priority" class="form-control">
+								<option>3</option>
+								<option>2</option>
+								<option>1</option>
+							</select>
+						</td>
+						
+						<td>
+							<button type="button" @click="createproject(curpage)" class="btn btn-primary">添加</a>
+						</td>
+					</tr>
+                </tfoot>
+				</table>
+				</div>
+						<ul class="pagination pagination-lg">
+							<li v-if="curpage===1" class="disabled"><a href="#">上一页</a></li>
+							<li v-else @click="prePage()"><a href="#">上一页</a></li>
+							<template v-for="page in pageCount">
+							<li v-if="page===curpage" class="active"  @click="numPage(page,$event)"><a href="#">{{page}}</a></li>
+							<li v-else   @click="numPage(page,$event)"><a href="#">{{page}}</a></li>
+							</template>
+							<li v-if="curpage===pageCount" class="disabled"><a href="#">下一页</a></li>
+							<li v-else @click="nextPage()"><a href="#">下一页</a></li>
+						</ul>
+       			<div>
+		        <button class="btn btn-primary" onclick="document.getElementById('id1').style='background:white'">更改样式</button>
+				<input class="btn btn-primary" type="button" value="排序" onclick="paiXu()">
+				<input type="button" onclick="HiddenTr(0)" value="隐藏完成项" class="btn btn-primary"/>
+				<input type="button" onclick="HiddenTr(1)" value="显示完成项" class="btn btn-primary"/>
+				
+
+
+				
+		
+		</div>						
+        </div>           
+                </div>
+				</div>
+    
+    
+  </body>
+  <script src="/vue.js"></script>
+  <script>
+  //优先级排序功能
+		function paiXu ()
+		{
+			var tabNode = document.getElementsByTagName ("tbody")[0];
+			var trs = tabNode.rows;
+			var arr = new Array;
+			for ( var x = 0; x < trs.length; x++)
+			{
+				arr.push (trs[x]);
+			}
+			sortt (arr);
+			for ( var x = 0; x < arr.length; x++)
+			{
+				tabNode.appendChild (arr[x]);
+			}
+		}
+		 
+		function sortt (arr)
+		{
+			for ( var x = 0; x < arr.length; x++)
+			{
+				for ( var y = x + 1; y < arr.length; y++)
+				{
+					if (parseInt (arr[x].cells[2].childNodes[0].nodeValue) <= parseInt (arr[y].cells[2].childNodes[0].nodeValue))//cell列
+					{
+						var tmp = arr[x];
+						arr[x] = arr[y];
+						arr[y] = tmp;
+					}
+				}
+			}
+		}
+
+		//搜索功能:
+				
+		function myFunction() {
+		  // 声明变量
+		  var input, filter, table, tr, td, i;
+		  input = document.getElementById("myInput");
+		  filter = input.value.toUpperCase();
+		  table = document.getElementById("myTable");
+		  tr = table.getElementsByTagName("tr");
+
+		  // 循环表格每一行，查找匹配项
+		  for (i = 0; i < tr.length; i++) 
+		  {
+			td = tr[i].getElementsByTagName("td")[1];
+			if (td) 
+			{
+			  if (td.innerHTML.toUpperCase().indexOf(filter) > -1) 
+			  {
+				tr[i].style.display = "";
+			  } 
+			  else 
+			  {
+				tr[i].style.display = "none";
+			  }
+			} 
+		  }
+		}
+		//隐藏完成项
+		
+		function HiddenTr(display)
+		{
+			var j,k,l;
+			var tempTable=document.getElementsByTagName("tbody")[0]
+			
+					$("table :checkbox").each//遍历table中checkbox
+					(function(key,value)
+					{
+						if($(value).prop('checked'))
+						{
+							if(display=="1")
+							{
+								tempTable.rows[key].style.display=""
+							}
+							else
+							{
+								tempTable.rows[key].style.display="none"
+							}
+						}
+					})
+
+
+		}
+  var vm = new Vue(
+            {
+
+                el: '#app',
+                data:{
+                    
+                    projects:[{id:1,ps:'大作业',priority:2,class1:false}
+							
+							],
+					
+					newProject:{id:0,ps:'',priority:1,class1:false},
+                    thing:[{id:1,name:'web'}],
+					newthing:{id:0,name:''},
+					
+					pagesize:5,
+					curpage:1
+					
+                },
+			
+				created:function()
+				{
+					this.pageCount=Math.ceil(this.projects.length/this.pagesize);
+					if(localStorage.getItem('tablesBackup'))
+					{
+						this.projects=JSON.parse(localStorage.getItem("tablesBackup"));
+					}
+					if(localStorage.getItem('tablesBackdown'))
+					{
+						this.thing=JSON.parse(localStorage.getItem("tablesBackdown"));
+					}
+				},
+				updated()
+				{
+					localStorage.setItem('tablesBackup',JSON.stringify(this.projects));
+					localStorage.setItem('tablesBackdown',JSON.stringify(this.thing));
+				},
+					methods:{
+                        createproject:function(num){
+						if(this.newProject.id===0)
+						{
+						this.newProject.id=this.projects.length+1;
+                        this.projects.push(this.newProject);
+						if(this.projects.length%5==1)
+						{
+                            this.pageCount=this.pageCount+1;
+							
+						}
+						}
+							
+						
+                         this.newProject={id:0,name:'',time:"",level:'',ps:''};
+					},
+                    deleteProject:function(id)
+					{
+                        this.projects.splice(id,1);
+						if(this.projects.length%5==0)
+						{
+							this.pageCount=this.pageCount-1;
+
+						}
+                    },
+					changeProject:function(project)
+					{
+						this.newProject=project;
+					},
+                    
+					
+
+
+					
+					
+                prePage:function(event){
+                    if(this.curpage>1)
+                    {
+                        this.curpage=this.curpage-1;
+                    }
+                        
+                },
+                nextPage:function(event){
+                    if(this.curpage<this.pageCount)
+                    {
+                        this.curpage=this.curpage+1;
+                    }
+                },
+				numPage:function(num,event){
+					if(this.curpage==num)
+					{	return;	}
+					this.curpage=num;
+				},
+				addthing:function()
+							{
+								 var input = document.getElementById("thingk");
+								
+								this.newthing.id=this.thing.length+1;
+								this.newthing.name=input.value;
+								this.thing.push(this.newthing);
+								window.location.reload();								
+								
+							},
+				
+                }
+            
+			}
+        )
+  </script>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>登录</title>
+ <script>
+     
+        window.addEventListener('load',function(){
+             
+            var form = document.forms[0];
+ 
+            form.addEventListener('submit',function(e){
+             
+                e.preventDefault();
+                 
+                var username = form.username.value;
+                var password = form.password.value;
+                 
+                var userInfo = JSON.parse(localStorage.getItem(username));
+                 
+                if(userInfo && userInfo.password === password)
+				{
+					location.href = 'list.html';
+					return alert('登录成功!');
+				} 
+				else
+				{     
+			
+                alert('登录失败!');
+                } 
+            });
+             
+            document.getElementsByTagName('submit')[0].addEventListener('click',function(e){
+                 
+                e.preventDefault();
+                 
+                location.href = 'list.html';
+                 
+            });
+        });
+         
+    </script>
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<link rel="stylesheet" href="/css/style.css" />
+
+<body>
+
+<div class="login-container">
+	<h1>用户登录</h1>
+	
+	<div class="connect">
+		<p>开启一天美好生活</p>
+	</div>
+	
+	<form action="" method="post" id="loginForm"action="#">
+		<div>
+			<input type="text" name="username" class="username" placeholder="用户名" autocomplete="off"/>
+		</div>
+		<div>
+			<input type="password" name="password" class="password" placeholder="密码" oncontextmenu="return false" onpaste="return false" />
+		</div>
+		<button id="submit" type="submit">登 录</button>
+	</form>
+
+	<a href="register.html">
+		<button type="button" class="register-tis">还有没有账号？</button>
+	</a>
+
+</div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/common.js"></script>
+<!--背景图片自动更换-->
+<script src="/js/supersized.3.2.7.min.js"></script>
+<script src="/js/supersized-init.js"></script>
+<!--表单验证-->
+<script src="/js/jquery.validate.min.js?var1.14.0"></script>
+
+</body>
+</html>
